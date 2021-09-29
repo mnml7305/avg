@@ -1,0 +1,747 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="request.RequestBean"%>
+<%
+	ArrayList<RequestBean> beanList = (ArrayList<RequestBean>) request.getAttribute("beanList");
+%>
+<%
+String user_id = (String)request.getAttribute("user_id");
+String request_type = (String)request.getAttribute("request_type");
+String company_name = (String)request.getAttribute("company_name");
+String mode = (String)request.getAttribute("mode");
+String user_title = (String)request.getAttribute("user_title");
+String reson_mode = (String)request.getAttribute("reson_mode");
+String shipping_mode = (String)request.getAttribute("shipping_mode");
+String int_type = (String)request.getAttribute("int_type");
+%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <input type="hidden" value="mode">
+    <link rel="stylesheet" href="css/request.css" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="js/zipcode.js"></script>
+    <script>
+      (function () {
+        document.addEventListener('DOMContentLoaded', function() {
+          const btn = document.getElementById('dropdown_btn');
+          if(btn) {
+            btn.addEventListener('click', function(){
+              this.classList.toggle('is-open');
+            });
+          }
+        });
+      }());
+    </script>
+    <script type="text/javascript">
+      $(function() {
+        $('button#add').click(function(){
+        var device = document.getElementById("device");
+       //  var type = document.getElementById("request_type").value;
+       var = <%=int_type %>;
+        var add = '' +
+                  '<dl>' +
+                  '  <dt>機種名</dt>' +
+                  '    <dd>' +
+                  '      <input type="text" name="device_name[]">' +
+                  '    </dd>' +
+                  '  <dt>携帯電話番号</dt>' +
+                  '    <dd>' +
+                  '      <input type="text" name="mobile[]" maxlength="13" pattern="\d{2,4}-\d{3,4}-\d{3,4}" required>' +
+                  '    </dd>' +
+                  '</dl>';
+         if (type == "2") {
+            add += '<dl>' +
+                    '  <dt>故障理由・状況等</dt>' +
+                    '    <dd>' +
+                    '      <textarea  name="reason"></textarea required>' +
+                    '    </dd>' +
+                    '</dl>';
+         }
+          $(add).appendTo(device);
+        });
+        
+      });
+    </script>
+    <script type="text/javascript">
+      function carrierChange() {
+        if (document.getElementById("carrier_id")) {
+          value = document.getElementById("carrier_id").value;
+          if (value == "4") {
+            //入力エリアを表示
+            document.getElementById("other").style.display = "block";
+          } else {
+            //入力エリアを非表示
+            document.getElementById("other").style.display = "none";
+          }
+        }
+      }
+    </script>
+    <script type="text/javascript">
+      function confirmCheck(){
+          
+        var result = confirm("依頼を受付事務局に確認します。よろしいですか？");
+        return result;
+      }
+    </script>
+    <script type="text/javascript">
+      function cancelCheck(){
+
+        var chancel = confirm("依頼をキャンセルしてもよろしいですか？");
+          return chancel;
+        }
+    </script>
+    <title>新規(故障/紛失)キッティング依頼フォーム</title>
+  </head>
+  <!-- body -->
+  <body>
+    <!-- header -->
+    <header>
+      <div class="header">
+        <img class="logo" src="img/logo.png">
+        <h1 class="blue" id="title">新規(故障/紛失)キッティング依頼フォーム</h1>
+        <div class="dropdown">
+          <span class="company"><%=company_name %></span>
+            <button class="dropdown_btn" id="dropdown_btn">
+              <a></a>
+            </button>
+            <div class="dropdown_body">
+              <ul class="dropdown_list">
+                <li class="dropdown_item"><a href="/password_change" class="dropdown_item-link">パスワード変更</a></li>
+                <li class="dropdown_item"><a href="/logout" class="dropdown_item-link">ログアウト</a></li>
+              </ul>
+            </div>
+        </div>
+      </div>
+    </header>
+    <!-- header End -->
+    <!-- main -->
+    <main class="request">
+      <!-- div main -->
+      <div class="main">
+        <!-- form -->
+        <form method="post" action="Request" onSubmit="return confirmCheck();">
+          <!-- title -->
+          <div class="title">
+            <h2 class="blue">■<%=mode %></h2>
+          </div>
+          <!-- title End -->
+          <!-- div setting -->
+          <div class="setting">
+            <h3 class="blue">①設定機器情報</h3>
+            <div id="setting" class="setting_data">
+              <div id="device" class="device">
+                <dl>
+                  <dt class="device">機種名</dt>
+                    <dd class="device">
+                      <input type="text" name="device_name[]">
+                    </dd>
+                  <dt class="mobile">携帯電話番号</dt>
+                    <dd class="mobile">
+                      <input type="text" name="mobile[]" maxlength="13" pattern="\d{2,4}-\d{3,4}-\d{3,4}" required>
+                    </dd>
+                </dl>
+                <dl class="reson" name="reson_dl" style=<%=reson_mode %>>
+                  <dt class="reson">故障理由・状況等</dt>
+                    <dd>
+                      <textarea  name="reason" required></textarea>
+                    </dd>
+                </dl>
+              </div>
+              <div class="add_btn">
+                <button id="add" type="button"><span>＋&nbsp;</span>追加</button>
+              </div>
+            </div>
+          </div>
+          <!-- setting End -->         
+          <!-- shipping -->
+          <div class="shipping" style=<%=shipping_mode %>>
+            <h3 class="blue">②受付事務局への配送情報</h3>
+            <div class="shipping_data">
+              <dl>
+                <dt>発送日</dt>
+                  <dd>
+                    <input type="date" name="shipping_date" required>
+                  </dd>
+                <dt>運送業者</dt>
+                  <dd>
+                    <select id="carrier_id" name="carrier_id" onchange="carrierChange();" required>
+                    	<option value="0" selected ></option>
+                  	<% for(RequestBean bean : beanList){ %>
+	                   	<option value=<%= bean.getcarrier_id() %>><%= bean.getcarrier_name() %></option>
+						<% } // endfor %>
+					</select>
+                    </dd>
+                        <!--<select id="carrier_id" name="carrier_id" onchange="carrierChange();" required>
+                        <option value="0"></option>
+                        <option value="1">ヤマト</option>
+                        <option value="2">佐川</option>
+                        <option value="3">郵便</option>
+                        <option value="4">その他</option>
+                      </select>-->
+                  <dt>発送番号</dt>
+                    <dd>
+                      <input type="text" name="shipping_number" required>
+                    </dd>
+                </dl>
+                <dl>
+                <div id="other" style="display:none">
+                  <p>その他：<input type="text" id="other" name="other" value="" size="15" ></p>
+             	</div>
+                </dl>
+              </div>
+            </div>
+          </div>
+          <!-- shipping End -->
+          <!-- user -->
+          <div class="user">
+            <h3 class="blue"><%=user_title %>設定後のお届け情報</h3>
+            <div class="user_data">
+              <dl>
+                <dt>郵便番号</dt>
+                  <dd>
+                    <input type="text" id="zip_code" name="zip_code" maxlength="8" pattern="\d{3}-\d{4}" placeholder="000-0000" required>
+                    <button id="btn" type="button" class="zipcode_btn">検索</button>
+                  </dd>
+              </dl>
+              <dl>
+                <dt>住所</dt>
+                  <dd>
+                    <input type="text" id="address1" name="address1" required>
+                  </dd>
+              </dl>
+              <dl>
+                <dt>番地・建物名</dt>
+                  <dd>
+                    <input type="text" name="address2" required>
+                  </dd>
+              </dl>
+              <dl>
+                <dt>電話番号</dt>
+                  <dd>
+                    <input type="tel" name="tel" maxlength="13" pattern="\d{2,4}-\d{3,4}-\d{3,4}" required>
+                  </dd>
+              </dl>
+              <dl>
+                <dt>部署</dt>
+                  <dd>
+                    <input type="text" name="department_name" required>
+                  </dd>
+              </dl>
+              <dl>
+                <dt>氏名</dt>
+                  <dd>
+                    <input type="text" name="name" required>
+                  </dd>
+              </dl>
+              <dl>
+                <dt>メールアドレス</dt>
+                  <dd>
+                    <input type="email" name="mail" required>
+                  </dd>
+              </dl>
+            </div>
+          </div>
+          <!-- user End -->
+          <!-- btn -->
+          <div class="post_btn">
+            <input type="submit" value="確認" id="confirm" name="confirm_btn">
+            <input type="reset" value="キャンセル" id="cancel" name="cancel_btn">
+            <!-- <input type="btn" value="キャンセル" id="qcancel" name="qcancel_btn" onclick="cancelCheck();"> -->
+          </div>
+          <!-- btn End -->
+        </form>
+        <!-- form End -->
+      </div>
+      <!-- div main End -->
+    </main>
+    <!-- main End -->
+  </body>
+  <!-- body End -->
+</html>
+<!-- html End -->
+
+
+-------------
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%> <%@ page import="java.util.ArrayList"%> <%@ page
+import="request.RequestBean"%> <% String user_id =
+(String)request.getAttribute("user_id"); String request_type =
+(String)request.getAttribute("request_type"); String company_name =
+(String)request.getAttribute("company_name"); String mode =
+(String)request.getAttribute("mode"); String user_title =
+(String)request.getAttribute("user_title"); String reson_mode =
+(String)request.getAttribute("reson_mode"); String shipping_mode =
+(String)request.getAttribute("shipping_mode"); %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="css/request.css" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="js/zipcode.js"></script>
+    <script>
+      (function () {
+        document.addEventListener('DOMContentLoaded', function() {
+          const btn = document.getElementById('dropdown_btn');
+          if(btn) {
+            btn.addEventListener('click', function(){
+              this.classList.toggle('is-open');
+            });
+          }
+        });
+      }());
+    </script>
+    <script type="text/javascript">   
+      function confirmCheck() {
+        var result = confirm("依頼を受付事務局に確認します。よろしいですか？");
+        return result;
+      }
+    </script>
+    <script type="text/javascript">
+      function cancelCheck() {
+        var chancel = confirm("依頼をキャンセルしてもよろしいですか？");
+        return chancel;
+      }
+    </script>
+    <title>新規(故障/紛失)キッティング依頼フォーム確認画面</title>
+  </head>
+  <!-- body -->
+  <body>
+   <!-- header -->
+    <header>
+      <div class="header">
+        <img class="logo" src="img/logo.png">
+        <h1 class="blue" id="title">新規(故障/紛失)キッティング依頼フォーム</h1>
+        <div class="dropdown">
+          <span class="company"><%=company_name %></span>
+            <button class="dropdown_btn" id="dropdown_btn">
+              <a></a>
+            </button>
+            <div class="dropdown_body">
+              <ul class="dropdown_list">
+                <li class="dropdown_item"><a href="" class="dropdown_item-link">パスワード変更</a></li>
+                <li class="dropdown_item"><a href="/logout" class="">ログアウト</a></li>
+              </ul>
+            </div>
+        </div>
+      </div>
+    </header>
+    <!-- header End -->
+    <!-- main -->
+    <main class="request">
+      <!-- div main -->
+      <div class="main">
+        <!-- form -->
+        <form method="post" action="/Confirm" onSubmit="return confirmCheck();">
+          <!-- title -->
+          <div class="title">
+            <h2 class="blue">■<%=mode %></h2>
+          </div>
+          <!-- title End -->
+          <!-- form -->
+        </form>
+      <!-- div main -->
+      </div>
+      <!-- div main End -->
+    </main>
+    <!-- main End -->
+  </body>
+  <!-- body End -->
+</html>
+<!-- html End -->
+
+
+
+--------------
+
+
+body{
+  margin: 0px;
+  font-family: "Meiro" ;
+}
+
+/* --- header --- */  
+.header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #def7ff;
+  color:#1f69ff;
+  height: 50px;
+}
+.logo{
+  width: 50px;
+  height: 40px;
+  margin: 0 5px;
+}
+#title {
+  width: auto;
+  min-width: 360px;
+  margin:5px auto 5px 0;
+}
+.company{
+  width: auto;
+  margin-right: 50px;
+  font-size: 14px;
+}
+
+/* --- main --- */
+.request{
+  margin: 15px 0 0 35px;
+}
+.main{
+    width: 100%;
+    box-sizing: border-box;
+}
+
+dl {
+  display: flex;
+}
+
+/* --- setting --- */
+.setting_data{
+  margin-left: 15px;
+}
+
+span.setting{
+  display: block;
+  padding-left: 10px;
+}
+
+.reason {
+  display: flex;
+  align-items:flex-start;
+  justify-content: space-around;
+  padding-bottom: 10px;
+}
+.device dl dt {
+  min-width: 120px;
+}
+.device dl dd {
+  margin-left: 10px;
+  min-width: 220px;
+  margin-right: 20px;
+  /*width: 100%;*/
+}
+
+/* --- shipping --- */
+.shipping{
+  padding-bottom: 15px;
+}
+.shipping_data{
+  /*display: flex;*/
+  align-items:flex-start;
+  margin-left: 15px;
+}
+.shipping_data.span {
+  position: absolute;
+  left: 35%;
+  width: 80px;
+  display: initial;
+}
+.shipping dl dt {
+  min-width: 60px;
+}
+.shipping dl dd {
+  margin-left: 10px;
+  min-width: 115px;
+  margin-right: 25px;
+
+}
+.shipping_data > dl:nth-child(2) > span:nth-child(1) {
+position: absolute;
+left: 328px;
+}
+
+/* --- user --- */
+.user_data{
+  align-items:flex-start;
+  margin-left: 15px;
+  padding-bottom: 15px;
+}
+#zip_code {
+width: 85px;
+}
+
+.user dl dt {
+  min-width: 110px;
+}
+.user dl dd {
+  margin-left: 10px;
+  width: 100%;
+}
+
+
+/* --parts-- */
+.device textarea{
+  width: 580px;
+  border-radius:7px;
+  border: 2px solid #dadee3;
+  resize: none;
+  padding: 4px 7px;
+  font-size: 14px;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="date"],
+select {
+  vertical-align: top;
+  width: 100%;
+  max-width: 400px;
+  height: 25px;
+  background: #ffffff;
+  border: 2px solid #dadee3;
+  border-radius: 5px;
+  padding: 0 7px;
+  font-size: 14px;
+}
+
+.device input[type="text"]{
+  width: 200px;
+  max-width: 200px;
+}
+
+/* --- btn --- */
+#add,
+#btn,
+#confirm,
+#cancel
+{
+   opacity: 1;
+}
+#add:hover,
+#btn:hover,
+#confirm:hover,
+#cancel:hover
+{
+   opacity: 0.5;
+}
+#add {
+  display : inline-block;
+  position: relative;
+  left: 60px;
+  width: 70px;
+  height: 33px;
+  border-radius: 7%;
+  border: unset;
+  font-size : 10pt;
+  text-align: center;
+  background-color: #007fff;
+  color:#ffffff;
+}
+#btn{
+  display : inline-block;
+  position: relative;
+  width: 60px;
+  height: 30px;
+  border-radius: 5px;
+  border: unset;
+  background-color:#dadee3;
+  margin-left: 10px;
+}
+.post_btn input{
+  display : inline-block;
+  position: absolute;
+  width: 200px;
+  height: 33px;
+  border-radius: 5px;
+  border: unset;
+  font-size : 9pt;
+  text-align: center;
+}
+#confirm {
+  left: 171px;
+  background-color: #007fff;
+  color:#ffffff;
+}
+#cancel {
+  left: 378px;
+  background-color:#dadee3;
+  margin-left: 10px;
+}
+
+#add span{
+  font-weight: bold;
+  font-size: larger;
+}
+.post_btn{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+  padding-bottom: 30px;
+}
+
+.post_btn.confirm{
+  display: inline-block;
+  width: 20%;
+  height: 35px;
+}
+
+.post_btn.cancel{
+  display: inline-block;
+  width: 20%;
+  height: 35px;
+  margin-left: 10px;
+}
+
+/* --- font --- */
+
+.blue{
+  color:#1f69ff;
+}
+
+h1.blue{
+  font-weight: 500;
+  font-size: 18px;
+}
+
+h2.blue{
+  font-weight: 500;
+  font-size: 19px;
+}
+h3.blue{
+  font-weight: 600;
+  font-size: 14px;
+}
+dt,#other{
+  font-size: 14px;
+}
+
+/* --- dropdown --- */
+.dropdown {
+  margin: 0 0 0 auto;
+  position: relative;
+}
+.dropdown_btn {
+  display: block;
+  width: 1.5em;
+  padding: 0.2em;
+  background: none;
+  border: 0;
+  position: absolute;
+  top: 5px;
+  right: 20px;
+}
+.dropdown_btn.is-open::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  cursor: default;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 4;
+}
+.dropdown_btn.is-open + .dropdown_body {
+  display: block;
+  z-index: 5;
+}
+.dropdown_body {
+  display: none;
+  width: 225px;
+  background: #fff;
+  box-shadow: 0 2px 6px 2px rgba(60,64,67,0.149), 0 1px 2px 0 rgba(60,64,67,0.302);
+  border-radius: 4px;
+  overflow: hidden;
+  position: absolute;
+  top: 32px;
+  left: 0;
+}
+.dropdown_list {
+  margin: 0;
+  padding: 0;
+}
+.dropdown_item {
+  display: block;
+}
+.dropdown_item-link {
+  display: block;
+  padding: 1em 1.2em;
+  font-size: 0.95em;
+  text-decoration: none;
+  color: #444;
+}
+.dropdown_item-link:hover {
+  background: #fbfbfb;
+}
+
+/* --- ▼ --- */
+#dropdown_btn a{
+  display: block;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 10px solid #1f69ff;
+}＋
+
+/* --- ＋ --- */
+#add a{
+  display: block;
+  width: 20;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 10px solid #fff;
+}
+
+
+---------
+
+/**
+ * 郵便番号検索
+ */
+$(function(){
+
+    $("#btn").on('click', function () {
+
+      // ajax通信開始
+
+      $.ajax({
+
+        url: "http://zipcloud.ibsnet.co.jp/api/search?zipcode=" + $('#zip_code').val(),
+
+        dataType: 'jsonp',
+
+      }).then(
+
+        function (data) {
+
+          if (data.results) {
+
+            // 一致した住所がある
+
+            var result = data.results[0];
+			
+            // 「都道府県」「市区町村」「住所」をつなげて渡す
+            $('#address1').val(result.address1 + result.address2 + result.address3);
+
+			//var result = res.results[i];
+
+          } else {
+            // 一致した住所が無い
+			$('#address1').val(null);
+          }
+
+        },
+
+         function () {
+      // 通信失敗
+
+      });
+
+    });
+
+  });
+  
+  
+  
+  ------
