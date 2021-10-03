@@ -1,4 +1,68 @@
-  <table id="user_list">
+    <script type="text/javascript">
+     //add
+      $(function() {
+        $('button#add').click(function(){
+        var table = document.getElementById("setting");
+        var type = 1; //変数に変える
+        var row = setting.rows.length;
+            row = (row + 1) / 2
+       // if (type == 2) { row = (row + 1) / 2}
+        
+        var tr_form = '' +
+                          '<tr class="device_mobile">' +
+                          '<td><label for="device_name">機種名</label></td>' +
+                          '<td><input type="text" name="device_name' + row + '" class="device" maxlength="200">' +
+                          '      <label for="mobile">携帯電話番号</label>' +
+                          '      <input type="tel" name="mobile' + row + '" class="device" maxlength="20" pattern="\d{2,4}-\d{3,4}-\d{3,4}" placeholder="〇〇〇-〇〇〇〇-〇〇〇〇" >' +
+                          '</td>' +
+                          '</tr>';
+          if (type == 2) {
+
+            tr_form += '' +
+                           '<tr class="reason">' +
+                           '<td><label for="reason">故障理由・状況等</label></td>' +
+                           '<td><textarea  name="reason' + row + '" maxlength="1000" required></textarea></td>' +
+                           '</tr>';
+          }  
+          $(tr_form).appendTo($('table > tbody'));
+      
+        });
+      });
+    </script>
+    
+  <div class="setting">
+  <h3 class="blue">①設定機器情報</h3>
+  <table id="setting">
+    <colgroup>
+      <col width="150" >
+      <col width="700" >
+    </colgroup>
+    <tbody>
+      <tr class="device_mobile">
+      <td><label for="device_name">機種名</label></td>
+      <td><input type="text" name="device_name1" class="device" maxlength="200">
+            <label for="mobile">携帯電話番号</label>
+            <input type="tel" name="mobile1" class="device" maxlength="20" pattern="\d{2,4}-\d{3,4}-\d{3,4}" placeholder="〇〇〇-〇〇〇〇-〇〇〇〇" required>
+      </td>
+      </tr>
+      <tr class="reason">
+      <td><label for="reason">故障理由・状況等</label></td>
+      <td><textarea  name="reason1" maxlength="1000" required></textarea></td>
+      </tr>
+    </tbody>
+    <tfoot>
+    <tr><td ><button id="add" type="button" class="btn_style">追加</button></td></tr>
+    </tfoot>
+  </table>
+  </div>
+
+//////////////////////////
+
+
+
+
+
+<table id="user_list">
     <thead>
         <tr>
             <th>名前</th>
