@@ -1,3 +1,32 @@
+    <script type="text/javascript">
+      $(function() {
+      
+        $('button#add').click(function(){
+        var table = document.getElementById("device");
+        var row = device.rows.length;
+        row = (row + 1 ) / 2
+        var tr_form = '' +
+        '<tr>' +
+          '<th>機種名-' + row + '</th> ' +
+          '<td><input type="text" name="device[]"></td>' +
+          '<th>携帯電話番号-' + row + '</th> ' +
+          '<td><input type="text" name="mobile[]"></td>' +
+        '</tr>' +
+        '<tr>' +
+          '<th>故障理由・状況等-' + row + '</th> ' +
+          '<td><textarea  name="rerson"></textarea></td>' +
+        '</tr>';
+
+        $(tr_form).appendTo($('table > tbody'));
+      
+      });
+      
+      });
+    </script>
+
+
+
+
 ////request
 <!DOCTYPE html>
 <html>
