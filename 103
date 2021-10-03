@@ -1,4 +1,22 @@
-    <script type="text/javascript">
+  <table id="user_list">
+    <thead>
+        <tr>
+            <th>名前</th>
+            <th>メールアドレス</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><input name="name[]" type="text" placeholder="名前を入力してください" /></td>
+            <td><input name="email[]" type="text" placeholder="メールアドレスを入力してください" /></td>
+            <td><button class="btn_delete" type="button">削除</button></td>
+        </tr>
+    </tbody>
+</table>
+  
+  
+  <script type="text/javascript">
       $(function() {
       
         $('button#add').click(function(){
