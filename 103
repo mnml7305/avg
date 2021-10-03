@@ -1,4 +1,52 @@
-    <script type="text/javascript">
+#setting {
+display: block;
+margin-bottom: 20px;
+padding-left: 20px;
+}
+#setting > tbody > tr > td > input {
+width: 200px;
+margin:5px 20px 5px 0;
+}
+#setting > tfoot > tr > td > button {
+margin-left: 57px;
+}
+#setting label{
+  display: inline-block;
+  margin-right: 20px;
+  margin-bottom: 5px;
+  padding-top: 10px;
+}
+.device_mobile{
+  vertical-align: middle;
+}
+.reason {
+vertical-align: top;
+}
+.reason > td > textarea {
+margin-top: 10px;
+padding-top: 5px;
+}
+
+.device_area, .reson_area {
+  margin-bottom: 20px;
+  padding-left: 20px;
+  display: block;
+}
+.device_area > label, .reson_area > label {
+  display: inline-block;
+  margin-right: 20px;
+}
+div.device_area > input {
+  margin-right: 20px;
+}
+#setting .device{
+  width: 240px ;  
+}
+
+
+
+
+<script type="text/javascript">
      //add
       $(function() {
         $('button#add').click(function(){
