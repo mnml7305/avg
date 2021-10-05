@@ -1,3 +1,99 @@
+  <style>
+
+    .shipping_confirm,.setting_confirm,.user_confirm{
+      display: block;
+      margin-bottom: 20px;
+      padding-left: 20px;
+    }
+    .shipping_confirm > .display_box {
+    display: inline-block;
+    margin-right: 20px;
+    padding-left: 20px;
+    vertical-align: top;
+}
+.setting_table {
+  border-spacing: 25px 10px;
+  text-align: center;
+}
+
+.user > div > p {
+margin: 10px 0;
+}
+  </style>
+
+<div class="main">
+<div class="title">
+<a class="iqon"></a><h2 class="blue"><%=mode %></h2>
+</div>
+
+<div class="confirm">
+
+  <h3 class="blue">①設定機器情報</h3>
+  <div class="setting_confirm">
+	<table class="setting_table">
+   <colgroup>
+      <col width="auto%" >
+      <col width="auto%" >
+      <col width="auto%" >
+    </colgroup>
+		<tbody>
+			<tr>
+				<td>機種名</td>
+				<td>携帯電話番号</td>
+				<td>故障理由・状況等</td>
+			</tr>
+			<tr>
+				<td>機種　A5356236</td>
+				<td>090-9999-0000</td>
+				<td>理由○○---------------------------------</td>
+			</tr>
+ 			<tr>
+				<td>機種　B5356236</td>
+				<td>080-9999-0000</td>
+				<td>理由■--------------------------------</td>
+			</tr>     
+		</tbody>
+	</table>
+  </div>
+
+  <h3 class="blue">②受付事務局への配送情報</h3> 
+  <div class="shipping_confirm" style="<%=shipping_mode %>">  
+    <div class="display_box"><label for="shipping_date">発送日</label>
+      <p>×××××××××</p>
+    </div>
+    <div class="display_box"><label for="carrier_id">運送業者</label>
+      <p>×××××××××</p>
+    </div>
+    <div class="display_box"><label for="shipping_number">発送番号</label>
+     <p>×××××××××</p>
+    </div>
+  </div>
+</div>
+
+  <h3 class="blue">③設定後のお届け情報</h3>
+  <div class="user_confirm">  
+ 
+      <label>〒×××-××××</label>
+      <p>○○県○○市○○○</p>
+      <p>☎××××××××</p>
+      <p>部署の転写</p>
+      <p>氏名の転写</p>
+      <p>メールアドレスの転写</p>
+  
+  </div>
+
+  <form method="POST" action="/webapp/template/request/request.html" onchange="confirmCheck()" required>
+    <div class="btn_area">
+    <input type="submit" value="送信" id="post" class="btn_style" name="post_btn" onclick="return confirmCheck();">
+    <input type="button" value="戻る" id="back" class="btn_style" name="back_btn" onclick="history.back();">
+    </div>
+  </form>
+  
+</div>
+
+
+
+
 <!DOCTYPE html>
 <html>
   <head>
