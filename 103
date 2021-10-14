@@ -1,3 +1,61 @@
+  <div id="setting">
+  <h3 class="blue">①設定機器情報</h3>
+    <div class="device_area">
+      <label label for="device_name">機種名</label>
+      <input type="text" name="device_name" class="device" maxlength="200">
+      <label for="mobile">携帯電話番号</label>
+      <input type="tel" name="mobile" class="device" maxlength="20" pattern="\d{2,4}-\d{3,4}-\d{3,4}" placeholder="〇〇〇-〇〇〇〇-〇〇〇〇" required>
+    </div>
+    <div class="reson_area" style="<%=reson_mode%>">
+      <label for="reason">故障理由・状況等</label>
+      <textarea  name="reason" maxlength="1000" required></textarea>
+    </div>
+ </div>
+<div class="add_btn">
+  <button type="button" id="add" class="btn_style">＋追加</button>
+</div> 
+<input type="hidden" id="count" value=0>
+  
+  
+  <script type="text/javascript">
+     //add
+      $(function() {
+        $('button#add').click(function(){
+        var setting = document.getElementById("setting");
+        var count = document.getElementById("count").value;
+        var no = Number(count) + 1;
+          //空白行チェック
+          if (no > 1) {
+            var device_name = document.getElementById("device_name" + (no-1));
+            var mobile = document.getElementById("mobile" + (no-1));
+            var reason = document.getElementById("reason" + (no-1));
+            if(!device_name.value && !mobile.value && !reason.value){return}
+         }
+          var type = 2; //変数に変える
+          var add_device = '' +
+                          '<div class="device_area">' +
+                          '<label label for="device_name">機種名</label>' +
+                          '<input type="text" name="device_name' + no + '" id="device_name' + no + '" class="device" maxlength="200">' +
+                          '<label for="mobile">携帯電話番号</label>' +
+                          '<input type="tel" name="mobile' + no + '" id="mobile' + no + '" class="device" maxlength="20" pattern="\\d{2,4}-\\d{3,4}-\\d{3,4}" placeholder="〇〇〇-〇〇〇〇-〇〇〇〇">' +
+                          '</div>';
+                          $(add_device).appendTo(setting);
+        
+            if (type === 2) {
+            var reson  = document.getElementById("reson");
+            var add_reson = '' +
+                            '<div class="reson_area" style="<%=reson_mode%>">' +
+                            '<label for="reason">故障理由・状況等</label>' +
+                            '<textarea name="reason' + no + '" id="reason' + no + '" maxlength="1000"></textarea>' +
+                            '</div>';
+                            $(add_reson).appendTo(setting); 
+            } 
+            $('#count').val(no);
+        });
+      });
+    </script>
+  
+  
   <style>
 
     .shipping_confirm,.setting_confirm,.user_confirm{
