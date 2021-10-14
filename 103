@@ -1,4 +1,33 @@
-  <div id="setting">
+
+
+
+<script>
+$(document).ready(function(){
+	$("#cancel").bind("click", function(){
+    var result = confirm("依頼をキャンセルしてもよろしいですか？")
+         if(!result) {
+            //no
+            return false;
+        } else {
+            //yes
+           clearForm(this.form);
+           return result;
+        }
+   function clearForm (form) {
+		$(form)
+    .find("input, select, textarea")
+    .not(":button, :submit, :reset, :hidden")
+    .val("")
+    .prop("selected", false)
+    .end();
+    $("#count").val(0);
+    }
+	});
+});
+</script>
+
+
+<div id="setting">
   <h3 class="blue">①設定機器情報</h3>
     <div class="device_area">
       <label label for="device_name">機種名</label>
