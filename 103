@@ -1,6 +1,96 @@
+<script type="text/javascript">
+     //追加ボタン
+      $(function() {
+        $('button#add').click(function(){
+        var setting = document.getElementById("setting");
+        var count = document.getElementById("count").value;
+        var no = Number(count) + 1;
+          //空白行チェック
+          if (no > 1) {
+            var device_name = document.getElementById("device_name" + (no-1));
+            var mobile = document.getElementById("mobile" + (no-1));
+            if (type === 2) {
+                var reason = document.getElementById("reason" + (no-1));
+                if(!device_name.value && !mobile.value && !reason.value){return}
+            }
+            if(!device_name.value && !mobile.value){return}
+         }
+          var type = 1; //変数に変える
+          var add_device = '' +
+                          '<div class="device_area" id="device_area' + no + '">' +
+                          '   <label label for="device_name">機種名</label>' +
+                          '   <input type="text" name="device_name' + no + '" id="device_name' + no + '" class="device" maxlength="200">' +
+                          '   <label for="mobile">携帯電話番号</label>' +
+                          '   <input type="tel" name="mobile' + no + '" id="mobile' + no + '" class="device" maxlength="20" pattern="\\d{2,4}-\\d{3,4}-\\d{3,4}" placeholder="〇〇〇-〇〇〇〇-〇〇〇〇">' +
+                          '   <button type="button" class="btn_style" value=' + no + '>削除</button>' +
+                          '</div>';
+                          $(add_device).appendTo(setting);
+        
+            if (type === 2) {
+            var reson  = document.getElementById("reson");
+            var add_reson = '' +
+                            '<div class="reson_area" id="reson_area' + no + '" style="<%=reson_mode%>">' +
+                            '   <label for="reason">故障理由・状況等</label>' +
+                            '   <textarea name="reason' + no + '" id="reason' + no + '" maxlength="1000"></textarea>' +
+                            '</div>';
+                            $(add_reson).appendTo(setting); 
+            } 
+            $('#count').val(no);
+        });
+      });
+    </script>
+    <script type="text/javascript">
+    //削除ボタン
+   $(function() {
+      $('#setting').on('click','.btn_style',function(){
+      $(this).closest('div').remove();
+      var count = $("#count").val();
+      $("#count").val(count-1);
+    });
+   })
+   
+  <script>
+//キャンセルボタン
+$(document).ready(function(){
+	$("#cancel").bind("click", function(){
+    var result = confirm("依頼をキャンセルしてもよろしいですか？")
+        if(!result) {
+          //no
+          return false;
+        } else {
+          //yes
+          clearForm(this.form);
+          clearSetting();
+          $("#count").val(0);
+          return result;
+        }
+	});
+});    
+  function clearForm (form) {
+    $(form)
+    .find("input, select, textarea")
+    .not(":button, :submit, :reset, :hidden")
+    .val("")
+    .prop("selected", false)
+    .end();
+    }
+  function clearSetting() {
+    var count = $("#count").val();
+    if(count > 0 ){
+      for(var i=1; i<=count; i++){
+      var type = 1;//変数に変える
+      var area = "#device_area" + i;
+      $(area).remove();
+        if(type === 2){
+          area =  "#reason_area" + i;
+          $(area).remove();    
+        }
+      }
+    }
+  } 
+</script> 
 
-
-
+///
 <script>
 $(document).ready(function(){
 	$("#cancel").bind("click", function(){
