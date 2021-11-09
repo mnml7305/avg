@@ -1,3 +1,95 @@
+package model;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Date;
+import java.util.Properties;
+
+import jakarta.mail.AuthenticationFailedException;
+import jakarta.mail.Authenticator;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
+
+public class Mail {
+	
+	static final String HOST = "smtp.gmail.com";			//ホスト
+	static final String PORT = "587";						//ポート
+	static final String TIMEOUT = "10000";					//タイムアウト
+	static final String SMTP_USERNAME = "dbnmr7305";		//SMTPユーザー名
+	static final String SMTP_PASSWORD = "mym773300";		//SMTPパスワード
+	static final String FROM = "dbnmr7305@gmail.com";		//送信元アドレス
+	static final String FROMNAME = "差出人名";				//送信元名
+	static final String SUBJECT = "件名テスト";			//件名
+	static final String MAIL_CONTENT = "テストメール本文";//メール本文
+	static final String CHARSET = "UTF-8";
+	/**
+	 *完了メール送信
+	 *	//送信後の確認メールを送信
+	 *	model.Mail.sendMessage(request.getParameter("toAddress"),request.getParameter("toName"));
+	 */
+	public static void sendMessage(String toAddress, String toName) {
+		
+		//プロパティ設定
+		Properties props = new Properties();
+		props.setProperty("mail.smtp.host",HOST); 
+		props.setProperty("mail.smtp.port", PORT);
+		props.setProperty("mail.smtp.connectiontimeout", TIMEOUT);
+		props.setProperty("mail.smtp.timeout", TIMEOUT);
+		props.setProperty("mail.smtp.auth", "true");			//認証
+		props.setProperty("mail.smtp.starttls.enable", "true");	//暗号化
+		props.setProperty("mail.smtp.debug", "true");			//ログ
+		
+		//セッション作成
+		Session session = Session.getInstance(props, new Authenticator() {
+			@Override
+			protected PasswordAuthentication getPasswordAuthentication() {
+				//SMTPアカウント設定
+				return new PasswordAuthentication(SMTP_USERNAME,SMTP_PASSWORD);
+			}
+		});
+		
+		try {
+			//メール設定
+			MimeMessage mimeMessage = new MimeMessage(session);
+			//送信元アドレス、表示名、文字コードを設定
+			InternetAddress addFrom = new InternetAddress(FROM, FROMNAME,CHARSET);
+			mimeMessage.setFrom(addFrom);
+			//送信先アドレス、表示名、文字コードを設定
+			InternetAddress addTo = new InternetAddress(toAddress,toName,CHARSET);
+			mimeMessage.addRecipient(Message.RecipientType.TO, addTo);
+			//件名を設定
+			mimeMessage.setSubject(SUBJECT,CHARSET);
+			//メール本文を設定
+			mimeMessage.setText(MAIL_CONTENT, CHARSET);
+			//日付の設定
+			mimeMessage.setSentDate(new Date());
+			//送信結果を返す
+			
+			//メール送信
+			Transport.send(mimeMessage);
+			
+		} catch (AuthenticationFailedException e) { 
+			//認証エラー
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			//smtpサーバ接続エラー
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// エンコードエラー
+			e.printStackTrace();
+		}
+		//ログ出力
+		
+	 }
+}   
+
+
+
+
 package request;
 
 import java.sql.Connection;
